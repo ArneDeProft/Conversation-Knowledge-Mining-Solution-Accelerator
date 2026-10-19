@@ -536,6 +536,7 @@ module keyvault 'br/public:avm/res/key-vault/vault:0.12.1' = {
     enableVaultForDiskEncryption: true
     enableVaultForTemplateDeployment: true
     enableRbacAuthorization: true
+    //enable key based access
     enableSoftDelete: true
     softDeleteRetentionInDays: 7
     diagnosticSettings: enableMonitoring ? [{ workspaceResourceId: logAnalyticsWorkspaceResourceId }] : []
@@ -614,16 +615,16 @@ module keyvault 'br/public:avm/res/key-vault/vault:0.12.1' = {
         value: !empty(existingOpenAIEndpoint) ? existingOpenAIEndpoint : 'https://${aiFoundryAiServicesResourceName}.openai.azure.com/'
       }
       {
+        name: 'AZURE-AI-AGENT-ENDPOINT'
+        value: !empty(existingProjEndpoint) ? existingProjEndpoint : aiFoundryAiServices.outputs.aiProjectInfo.apiEndpoint
+      }
+      {
         name: 'COG-SERVICES-ENDPOINT'
         value: !empty(existingOpenAIEndpoint) ? existingOpenAIEndpoint : aiFoundryAiServices.outputs.endpoint
       }
       {
         name: 'AZURE-OPENAI-SEARCH-PROJECT'
         value: !empty(existingAiFoundryAiProjectResourceId) ? existingAIProjectName : aiFoundryAiServicesAiProjectResourceName
-      }
-      {
-        name: 'AZURE-OPENAI-INFERENCE-ENDPOINT'
-        value: ''
       }
       {
         name: 'AZURE-OPENAI-DEPLOYMENT-MODEL'
@@ -651,11 +652,7 @@ module keyvault 'br/public:avm/res/key-vault/vault:0.12.1' = {
       }
       {
         name: 'AZURE-OPENAI-INFERENCE-ENDPOINT'
-        value: ''
-      }
-      {
-        name: 'AZURE-OPENAI-INFERENCE-ENDPOINT'
-        value: ''
+        value: !empty(existingOpenAIEndpoint) ? existingOpenAIEndpoint : 'https://${aiFoundryAiServicesResourceName}.openai.azure.com/'
       }
       {
         name: 'AZURE-OPENAI-EMBEDDING-MODEL'
@@ -749,7 +746,7 @@ module aiFoundryAiServices 'modules/ai-services.bicep' = if (aiFoundryAIservices
     projectDescription: 'AI Foundry Project'
     sku: 'S0'
     kind: 'AIServices'
-    disableLocalAuth: true
+    disableLocalAuth: false
     customSubDomainName: aiFoundryAiServicesResourceName
     apiProperties: {
       //staticsEnabled: false
@@ -1067,7 +1064,9 @@ module storageAccount 'br/public:avm/res/storage/storage-account:0.20.0' = {
     supportsHttpsTrafficOnly: true
     accessTier: 'Hot'
     enableTelemetry: enableTelemetry
-    tags: tags
+    tags: union(tags, {
+      SecurityControl: 'Ignore'
+    })
     enableHierarchicalNamespace: true
     roleAssignments: [
       {
@@ -1092,7 +1091,9 @@ module storageAccount 'br/public:avm/res/storage/storage-account:0.20.0' = {
       virtualNetworkRules: []
     }
     allowSharedKeyAccess: true
-    allowBlobPublicAccess: true
+    allowBlobPublicAccess: false
+    //enable key access
+
     publicNetworkAccess: enablePrivateNetworking ? 'Disabled' : 'Enabled'
     privateEndpoints: enablePrivateNetworking ? [
       {

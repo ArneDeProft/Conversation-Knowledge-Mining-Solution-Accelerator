@@ -106,7 +106,7 @@ param allowedFqdnList array?
 param apiProperties object?
 
 @description('Optional. Allow only Azure AD authentication. Should be enabled for security reasons.')
-param disableLocalAuth bool = true
+param disableLocalAuth bool = false
 
 import { customerManagedKeyType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
 @description('Optional. The customer managed key definition.')
@@ -202,7 +202,7 @@ resource cognitiveServiceNew 'Microsoft.CognitiveServices/accounts@2025-06-01' =
       : (!empty(networkAcls) ? 'Enabled' : 'Disabled')
     allowedFqdnList: allowedFqdnList
     apiProperties: apiProperties
-    disableLocalAuth: disableLocalAuth
+    disableLocalAuth: false
     #disable-next-line BCP036
     networkInjections: networkInjectionSubnetResourceId != null
       ? [
@@ -316,6 +316,7 @@ output privateEndpoints privateEndpointOutputType[] = useExistingService ? exist
 import { aiProjectOutputType } from './project.bicep'
 output aiProjectInfo aiProjectOutputType = useExistingService ? existing_cognitive_service_dependencies!.outputs.aiProjectInfo : cognitive_service_dependencies!.outputs.aiProjectInfo
 
+output accessKey1 string = !useExistingService ? cognitiveServiceNew.listKeys().key1 : ''
 // ================ //
 // Definitions      //
 // ================ //
