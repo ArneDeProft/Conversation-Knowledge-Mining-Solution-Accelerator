@@ -1,11 +1,11 @@
 {
-  "chat_agent_name": "TestAgent",
-  "title_agent_name": "SummaryAgent",
-  "search_index": "test-index",
-  "search_connection": "search-connection-6344o7dola7ko",
-  "model": "gpt-5.1",
-  "scenario": "azure_search_byod",
-  "use_sql": false,
+  "chat_agent_name": "ChatAgent-knwldgminingyuv33",
+  "title_agent_name": "SummaryAgent-knwldgminingyuv33",
+  "search_index": "knowledge-mining-index",
+  "search_connection": "cognitivesearch-connection-knwldgminingyuv33",
+  "model": "gpt-5.2",
+  "scenario": "contact-center",
+  "use_sql": true,
   "data_source_type": "azure_search",
   "data_source_name": "Knowledge Base"
 }

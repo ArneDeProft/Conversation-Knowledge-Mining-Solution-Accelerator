@@ -59,6 +59,7 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2025-10-15' = {
 resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2025-10-15' = {
   parent: cosmos
   name: databaseName
+  tags: tags
   properties: {
     resource: { id: databaseName }
   }
@@ -67,6 +68,7 @@ resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2025-10-15
 resource containersRes 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2025-10-15' = [for container in containers: {
   parent: database
   name: container.name
+  tags: tags
   properties: {
     resource: {
       id: container.name

@@ -157,6 +157,7 @@ var existingTags = resourceGroup().tags ?? {}
 
 // Tags: merge existing RG tags with standard metadata
 var resourceTags = union(existingTags, tags, {
+  SecurityControl: 'Ignore'
   TemplateName: 'KM-Generic'
   CreatedBy: createdBy
   DeploymentName: deployment().name
@@ -182,6 +183,7 @@ module log_analytics './modules/monitoring/log-analytics.bicep' = if (!useExisti
   params: {
     solutionName: solutionSuffix
     location: location
+    tags: resourceTags
   }
   scope: resourceGroup(resourceGroup().name)
 }
@@ -196,6 +198,7 @@ module app_insights './modules/monitoring/app-insights.bicep' = {
   params: {
     solutionName: solutionSuffix
     location: location
+    tags: resourceTags
     workspaceResourceId: logAnalyticsWorkspaceResourceId
   }
   scope: resourceGroup(resourceGroup().name)
@@ -231,6 +234,7 @@ module ai_foundry_project './modules/ai/ai-foundry-project.bicep' = if (empty(ex
   params: {
     solutionName: solutionSuffix
     location: azureAiServiceLocation
+    tags: resourceTags
   }
   scope: resourceGroup(resourceGroup().name)
 }
@@ -292,6 +296,7 @@ module ai_search './modules/ai/ai-search.bicep' = {
   params: {
     solutionName: solutionSuffix
     location: location
+    tags: resourceTags
     skuName: 'standard'
   }
   scope: resourceGroup(resourceGroup().name)
@@ -310,7 +315,7 @@ module storage_account './modules/data/storage-account.bicep' = {
   params: {
     solutionName: solutionSuffix
     location: location
-    tags: {}
+    tags: resourceTags
     containers: [
       { name: 'data', publicAccess: 'None' }
     ]
@@ -326,6 +331,7 @@ module cosmosDBModule './modules/data/cosmos-db-nosql.bicep' = if (deployCosmos)
     solutionName: solutionSuffix
     name: 'cosmos-${solutionSuffix}'
     location: location
+    tags: resourceTags
     databaseName: 'km-db'
     containers: [
       { name: 'chat_sessions', partitionKeyPath: '/user_id' }
@@ -358,6 +364,7 @@ module hostingplan './modules/compute/app-service-plan.bicep' = {
   params: {
     solutionName: solutionSuffix
     location: location
+    tags: resourceTags
     skuName: appServicePlanSku
   }
 }
@@ -384,7 +391,7 @@ module backend_docker './modules/compute/app-service.bicep' = {
     solutionName: solutionSuffix
     name: 'api-${solutionSuffix}'
     location: location
-    tags: union(tags, { 'azd-service-name': 'api' })
+    tags: union(resourceTags, { 'azd-service-name': 'api' })
     serverFarmResourceId: hostingplan!.outputs.resourceId
     kind: kind
     linuxFxVersion: placeholderImageName
@@ -424,7 +431,7 @@ module frontend_docker './modules/compute/app-service.bicep' = {
     solutionName: solutionSuffix
     name: 'app-${solutionSuffix}'
     location: location
-    tags: union(tags, { 'azd-service-name': 'webapp' })
+    tags: union(resourceTags, { 'azd-service-name': 'webapp' })
     serverFarmResourceId: hostingplan!.outputs.resourceId
     kind: kind
     linuxFxVersion: placeholderImageName

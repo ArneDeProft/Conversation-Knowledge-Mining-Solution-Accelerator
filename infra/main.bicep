@@ -38,7 +38,7 @@ param location string = resourceGroup().location
   azd:{
     type: 'location'
     usageName: [
-      'OpenAI.GlobalStandard.gpt-5.2,150'
+      'OpenAI.GlobalStandard.gpt-5.2,100'
       'OpenAI.GlobalStandard.text-embedding-3-small,80'
     ]
   }
@@ -65,7 +65,7 @@ param gptModelVersion string = '2025-12-11'
 
 @minValue(10)
 @description('Optional. Capacity of the GPT deployment (TPM in thousands).')
-param gptDeploymentCapacity int = 150
+param gptDeploymentCapacity int = 100
 
 @allowed(['text-embedding-3-small'])
 @description('Optional. Name of the Text Embedding model to deploy.')
@@ -137,7 +137,7 @@ param deployingUserPrincipalType string = 'User'
 // Parameters — AVM-specific (ignored when deploymentFlavor = 'bicep')
 // ============================================================================
 
-@description('Optional. Tags to apply to all resources (AVM only).')
+@description('Optional. Tags to apply to all supported resources. SecurityControl is always set to Ignore.')
 param tags object = {}
 
 @description('Optional. Enable/Disable usage telemetry for AVM modules.')
@@ -172,6 +172,7 @@ param vmSize string = 'Standard_D2s_v5'
 
 var isAvm = deploymentFlavor == 'avm' || deploymentFlavor == 'avm-waf'
 var isBicep = deploymentFlavor == 'bicep'
+var resourceTags = union(tags, { SecurityControl: 'Ignore' })
 
 // ============================================================================
 // Module: AVM Deployment (non-WAF and WAF)
@@ -187,7 +188,7 @@ module avmDeployment './avm/main.bicep' = if (isAvm) {
     solutionUniqueText: solutionUniqueText
     location: location
     azureAiServiceLocation: azureAiServiceLocation
-    tags: tags
+    tags: resourceTags
     enableTelemetry: enableTelemetry
     enableMonitoring: enableMonitoring
     enablePrivateNetworking: enablePrivateNetworking
@@ -231,7 +232,7 @@ module bicepDeployment './bicep/main.bicep' = if (isBicep) {
     solutionUniqueText: solutionUniqueText
     location: location
     azureAiServiceLocation: azureAiServiceLocation
-    tags: tags
+    tags: resourceTags
     deployCosmos: deployCosmos
     deploymentType: deploymentType  
     gptModelName: gptModelName

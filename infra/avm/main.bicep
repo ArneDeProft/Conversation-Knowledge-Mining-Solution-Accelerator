@@ -177,6 +177,7 @@ var useExistingAIProject = !empty(existingFoundryProjectResourceId)
 // ========== Tags: merge caller-supplied tags with standard metadata (matching old infra) ========== //
 var existingTags = resourceGroup().tags ?? {}
 var resourceTags = union(existingTags, tags, {
+  SecurityControl: 'Ignore'
   TemplateName: 'KM-Generic'
   CreatedBy: createdBy
   DeploymentName: deployment().name

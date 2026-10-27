@@ -82,6 +82,7 @@ module sqlServer 'br/public:avm/res/sql/server:0.21.1' = {
     databases: [
       {
         name: databaseName
+        tags: tags
         availabilityZone: -1
         collation: 'SQL_Latin1_General_CP1_CI_AS'
         autoPauseDelay: autoPauseDelay

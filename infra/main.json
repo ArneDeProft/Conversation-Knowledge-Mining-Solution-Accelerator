@@ -59,7 +59,7 @@
         "azd": {
           "type": "location",
           "usageName": [
-            "OpenAI.GlobalStandard.gpt-5.2,150",
+            "OpenAI.GlobalStandard.gpt-5.2,100",
             "OpenAI.GlobalStandard.text-embedding-3-small,80"
           ]
         },
@@ -100,7 +100,7 @@
     },
     "gptDeploymentCapacity": {
       "type": "int",
-      "defaultValue": 150,
+      "defaultValue":100,
       "minValue": 10,
       "metadata": {
         "description": "Optional. Capacity of the GPT deployment (TPM in thousands)."
@@ -464,7 +464,7 @@
                 "azd": {
                   "type": "location",
                   "usageName": [
-                    "OpenAI.GlobalStandard.gpt-5.2,150",
+                    "OpenAI.GlobalStandard.gpt-5.2,100",
                     "OpenAI.GlobalStandard.text-embedding-3-small,80"
                   ]
                 },
@@ -568,7 +568,7 @@
             },
             "gptDeploymentCapacity": {
               "type": "int",
-              "defaultValue": 150,
+              "defaultValue": 100,
               "minValue": 10,
               "metadata": {
                 "description": "Optional. Capacity of the GPT deployment (TPM in thousands)."
@@ -92037,7 +92037,7 @@
                 "azd": {
                   "type": "location",
                   "usageName": [
-                    "OpenAI.GlobalStandard.gpt-5.2,150",
+                    "OpenAI.GlobalStandard.gpt-5.2,100",
                     "OpenAI.GlobalStandard.text-embedding-3-small,80"
                   ]
                 },
@@ -92085,7 +92085,7 @@
             },
             "gptDeploymentCapacity": {
               "type": "int",
-              "defaultValue": 150,
+              "defaultValue": 100,
               "minValue": 10,
               "metadata": {
                 "description": "Optional. Capacity of the GPT deployment (TPM in thousands)."

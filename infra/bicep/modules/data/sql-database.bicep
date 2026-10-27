@@ -91,6 +91,7 @@ resource sqlDB 'Microsoft.Sql/servers/databases@2025-01-01' = {
   parent: sqlServer
   name: databaseName
   location: location
+  tags: tags
   sku: {
     name: skuName
     tier: skuTier
